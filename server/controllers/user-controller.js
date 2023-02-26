@@ -29,13 +29,15 @@ class UserController {
         }
     }
 
-    async activate(req, res, next) {
-        try {
-            
-        } catch (e) {
-
-        }
-    }
+    // async activate(req, res, next) {
+    //     try {
+    //         const activationLink = req.params.activationLink
+    //         await userService.activate(activationLink);
+    //         return res.redirect(process.env.CLIENT_URL);
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }
 
     async refresh(req, res, next) {
         try {
