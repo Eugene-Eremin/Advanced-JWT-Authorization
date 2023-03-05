@@ -1,41 +1,38 @@
 <template>
   <div>
+    <h1>{{ store.isAuth ? `${store.user.email} - авторизован` : "Не авторизован" }}</h1>
     <form @submit.prevent>
-      <div>{{ mes }}</div>
       <input v-model="email" placeholder="Почта" />
       <input v-model="password" placeholder="Пароль" />
-      <button @click="go">{{ mes }}</button>
-      <a @click="change('Регестрироваться')">Регестрироваться</a>
-      <a @click="change('Войти')">Войти</a>
+      <button @click="login">Войти</button>
+      <button @click="registration">Регестрироваться</button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { useStore } from './stores/store'
-
 const store = useStore()
 
-const mes = ref<string>('Войти')
+onMounted(() => {
+  if (localStorage.getItem('token')) {
+    store.checkAuth()
+  }
+})
 
 const email = ref<string>('')
 const password = ref<string>('')
 
-const change = (str: string): void => {
-  mes.value = str
+const login = (): void => {
+  console.log('Войти')
+  store.login(email.value, password.value)
 }
 
-const go = (): void => {
-  if (mes.value == 'Войти') {
-    console.log('Войти')
-    store.login(email.value, password.value)
-  } else {
-    console.log('Регестрироваться')
-    store.registration(email.value, password.value)
-
-  }
-  console.log(email.value, password.value)
+const registration = (): void => {
+  console.log('Регестрироваться')
+  store.registration(email.value, password.value)
 }
+
 </script>
