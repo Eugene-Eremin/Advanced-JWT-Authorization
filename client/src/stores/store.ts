@@ -12,8 +12,10 @@ import { API_URL } from '@/http'
 import axios from 'axios'
 
 export const useStore = defineStore('store', () => {
-  let user = ref<IUser>({} as IUser)
-  let isAuth = ref<boolean>(false)
+  const user = ref<IUser>({} as IUser)
+  const isAuth = ref<boolean>(false)
+
+  const isLoading = ref<boolean>(false)
 
   const setAuth = (bool: boolean): void => {
     isAuth.value = bool
@@ -59,6 +61,7 @@ export const useStore = defineStore('store', () => {
   }
 
   const checkAuth = async () => {
+    setLoading(true)
     try {
       const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {
         withCredentials: true
@@ -69,8 +72,25 @@ export const useStore = defineStore('store', () => {
       setUser(response.data.user)
     } catch (e: any) {
       console.log(e.response?.data?.message)
+    } finally {
+      setLoading(false)
     }
   }
 
-  return { user, isAuth, setAuth, setUser, login, registration, logout, checkAuth }
+  const setLoading = (bool: boolean) => {
+    isLoading.value = bool
+  }
+
+  return {
+    user,
+    isAuth,
+    setAuth,
+    setUser,
+    login,
+    registration,
+    logout,
+    checkAuth,
+    isLoading,
+    setLoading
+  }
 })
